@@ -1,3 +1,6 @@
+## NAME: GAYATHIRI ROSHINI M
+## REG NO:212223110012
+
 # Uploading temperature sensor data in Thing Speak cloud
 
 # AIM:
@@ -71,10 +74,80 @@ Automatically act on your data and communicate using third-party services like T
 
 
 # PROGRAM:
+```
+#include"ThingSpeak.h"
+#include<WiFi.h>
+#include"DHT.h"
+
+
+char id[]="Gayurosh";
+char pass[]="rosh2509";
+
+const int out=23;
+long T;
+float temperature=0;
+
+WiFiClient client;
+DHT dht(23,DHT11);
+
+unsigned long myChannelField=2913844;
+const int TemperatureField=1;
+const int HumidityField=2;
+const char* myWriteAPIKey="UR71TDPM9V00CX2Z";
+
+void setup() 
+{
+  Serial.begin(115200);
+  pinMode(out,INPUT);
+  ThingSpeak.begin(client);
+  dht.begin();
+  delay(1000);
+}
+
+void loop() {
+  if(WiFi.status()!=WL_CONNECTED)
+  {
+    Serial.print("Attempting to connect to SSID:");
+    Serial.println(id);
+    while(WiFi.status()!=WL_CONNECTED)
+    {
+      WiFi.begin(id,pass);
+      Serial.print(".");
+      delay(5000);
+    }
+    Serial.println("\nConnected.");
+
+  }
+  float temperature=dht.readTemperature();
+  float humidity=dht.readHumidity();
+
+  Serial.print("Temperature:");
+  Serial.print(temperature);
+  Serial.print("c");
+
+  Serial.print("Humidity:");
+  Serial.print(humidity);
+  Serial.print("g.m-3");
+
+
+
+  ThingSpeak.writeField(myChannelField,TemperatureField,temperature,myWriteAPIKey);
+  ThingSpeak.writeField(myChannelField,HumidityField,humidity,myWriteAPIKey);
+  delay(100);
+}
+```
 
 # CIRCUIT DIAGRAM:
+![WhatsApp Image 2025-04-12 at 11 56 38_70b3b487](https://github.com/user-attachments/assets/577b405a-20a3-4d8e-aa6e-51739c404ae9)
+
 
 # OUTPUT:
+![WhatsApp Image 2025-04-12 at 11 38 51_cae8ba28](https://github.com/user-attachments/assets/b90088ce-a009-4638-90d7-4ab69c2aef7c)
+
+![image](https://github.com/user-attachments/assets/cbc736fb-5b90-438b-a175-b7d9046cd7a5)
+
+
+
 
 # RESULT:
 
